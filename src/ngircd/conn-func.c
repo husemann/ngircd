@@ -96,23 +96,15 @@ Conn_LastPing( CONN_ID Idx )
 GLOBAL void
 Conn_SetPenalty(CONN_ID Idx, time_t Seconds)
 {
-	time_t t;
+/*
+ Here we just do nothing. This is cleaner than deleting 
+	IRC_SetPenalty and Conn_SetPenalty
 
-	assert(Idx > NONE);
-	assert(Seconds >= 0);
-
-	t = time(NULL);
-	if (My_Connections[Idx].delaytime < t)
-		My_Connections[Idx].delaytime = t;
-
-	My_Connections[Idx].delaytime += Seconds;
-
+	This allows ANYONE to flood. BEWARE!
+*/
 #ifdef DEBUG
 	Log(LOG_DEBUG,
-	    "Add penalty time on connection %d: %ld second%s, total %ld second%s.",
-	    Idx, (long)Seconds, Seconds != 1 ? "s" : "",
-	    My_Connections[Idx].delaytime - t,
-	    My_Connections[Idx].delaytime - t != 1 ? "s" : "");
+	    "Not adding penalty, but called for. Beware floods!",
 #endif
 } /* Conn_SetPenalty */
 
@@ -126,11 +118,12 @@ Conn_SetPenalty(CONN_ID Idx, time_t Seconds)
 GLOBAL void
 Conn_ResetPenalty(CONN_ID Idx)
 {
-	assert(Idx > NONE);
-
-	My_Connections[Idx].delaytime = 0;
+/*
+ Here too we just do nothing. The idea is to not touch the
+ .delaytime argument and save some cpu cycles.
+*/
 #ifdef DEBUG
-	Log(LOG_DEBUG, "Penalty time on connection %d has been reset.");
+	Log(LOG_DEBUG, "Not resetting penalty, but called for. We dont set penalties.");
 #endif
 } /* Conn_ResetPenalty */
 
